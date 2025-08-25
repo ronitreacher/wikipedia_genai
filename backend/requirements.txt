@@ -1,0 +1,12 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+langchain==0.1.0
+langchain-google-genai==0.0.6
+langchain-community==0.0.10
+wikipedia-api==0.6.0
+python-dotenv==1.0.0
+pydantic==2.5.0
+cors==1.0.1
+fastapi-cors==0.0.6
+requests==2.31.0
+wikipedia

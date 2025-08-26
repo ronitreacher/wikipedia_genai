@@ -36,11 +36,11 @@ if not GOOGLE_CLIENT_ID:
 else:
     logger.info("Google Client ID loaded successfully")
 
-
+frontend_url = os.getenv("FRONTEND_URL")
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", os.getenv("FRONTEND_URL")],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", frontend_url],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

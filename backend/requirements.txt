@@ -10,3 +10,4 @@ cors==1.0.1
 fastapi-cors==0.0.6
 requests==2.31.0
 wikipedia
+google-auth==2.24.0

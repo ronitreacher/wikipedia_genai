@@ -71,9 +71,14 @@ def verify_token(authorization: str = Header(...)):
 
 # Override or extend existing endpoints to include user verification
 
+# @app.get("/api/health")
+# async def health_check(user=Depends(verify_token)):
+#     return {"status": "ok", "user": user.get("email")}
+
 @app.get("/api/health")
-async def health_check(user=Depends(verify_token)):
-    return {"status": "ok", "user": user.get("email")}
+async def health_check():
+    return {"status": "ok"}
+
 
 
 # Include routers, optionally add verify_token dependency if needed

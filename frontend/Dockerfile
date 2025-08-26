@@ -3,32 +3,28 @@ FROM node:18 AS build
 
 WORKDIR /app
 
-# Accept build arguments for React environment variables
+# Accept REACT_APP_API_URL build argument
 ARG REACT_APP_API_URL
 ARG REACT_APP_GOOGLE_CLIENT_ID
 
 # Copy package files and install dependencies
-COPY package.json package-lock.json ./
-RUN npm install --silent && npm cache clean --force
+COPY package*.json ./
+RUN npm install
 
-# Copy all source files
+# Copy source code
 COPY . .
 
-# Set env variables for build
-ENV REACT_APP_API_URL=$REACT_APP_API_URL
-ENV REACT_APP_GOOGLE_CLIENT_ID=$REACT_APP_GOOGLE_CLIENT_ID
-
-# Build React app
-RUN npm run build
+# Inject the build arg into the React build environment for static substitution
+RUN REACT_APP_API_URL=$REACT_APP_API_URL REACT_APP_GOOGLE_CLIENT_ID=$REACT_APP_GOOGLE_CLIENT_ID npm run build
 
 # Production stage: serve with nginx
 FROM nginx:stable-alpine
 
-# Copy built React app static files to nginx
+# Copy built React files to nginx html folder
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Expose http port
+# Expose port 80 (nginx default)
 EXPOSE 80
 
-# Start nginx in foreground
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]

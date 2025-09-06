@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode';
-import GoogleLogin from './components/GoogleLogin';
 import ChatBot from './components/ChatBot';
 import './App.css';
 
@@ -9,7 +8,27 @@ const allowedUsers = ['ronitroytcs@gmail.com', 'ronitroyofficial96@gmail.com'];
 function App() {
   const [idToken, setIdToken] = useState(null);
 
-  const handleLogin = (token) => {
+  // Initialize Google Identity Services
+  useEffect(() => {
+    /* global google */
+    if (!window.google) return;
+
+    google.accounts.id.initialize({
+      client_id: '<YOUR_CLIENT_ID>.apps.googleusercontent.com', // replace with your client ID
+      callback: handleCredentialResponse,
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById('google-signin-button'),
+      { theme: 'outline', size: 'large' } // button customization
+    );
+
+    google.accounts.id.prompt(); // optional: auto prompt
+  }, []);
+
+  // Callback after login
+  const handleCredentialResponse = (response) => {
+    const token = response.credential;
     try {
       const user = jwt_decode(token);
       const email = user?.email;
@@ -35,7 +54,7 @@ function App() {
         <p>Ask me anything and I'll search Wikipedia for answers!</p>
       </header>
       <main>
-        {!idToken && <GoogleLogin onLogin={handleLogin} />}
+        {!idToken && <div id="google-signin-button"></div>}
         {idToken && <ChatBot idToken={idToken} />}
       </main>
     </div>

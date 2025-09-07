@@ -14,7 +14,7 @@ function App() {
     if (!window.google) return;
 
     google.accounts.id.initialize({
-      client_id: '<YOUR_CLIENT_ID>.apps.googleusercontent.com', // replace with your client ID
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID, // replace with your client ID
       callback: handleCredentialResponse,
     });
 
